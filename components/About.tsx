@@ -96,21 +96,20 @@ const Section: React.FC<SectionProps> = ({ title, titleJp, children }) => (
 
 export const About: React.FC = () => {
   return (
-    <div className="w-full max-w-4xl mx-auto px-8 md:px-12 pt-32 pb-20">
+    <div className="w-full h-screen overflow-hidden flex flex-col justify-center px-8 md:px-20 py-20">
       {/* Header */}
-      <header className="mb-16 md:mb-20 text-center">
-        <h1 className="text-3xl md:text-5xl font-light text-saka-ink/90 tracking-wider mb-4">
+      <header className="mb-8 md:mb-12 text-center">
+        <h1 className="text-2xl md:text-4xl font-light text-saka-ink/90 tracking-wider mb-2">
           About Me
         </h1>
-        <p className="text-base md:text-lg text-saka-highlight/70 max-w-2xl mx-auto leading-relaxed font-light">
+        <p className="text-sm md:text-base text-saka-highlight/70 max-w-2xl mx-auto leading-relaxed font-light">
           私の骨も青いから。
         </p>
-        <div className="mt-6 h-px w-24 bg-saka-highlight/30 mx-auto" />
+        <div className="mt-4 h-px w-24 bg-saka-highlight/30 mx-auto" />
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 max-w-4xl mx-auto">
         {/* Experience Section */}
-        {/* <Section title="Experience" titleJp="経験"> */}
         <Section title="Experience">
           {experiences.map((exp, index) => (
             <TimelineCard key={index} item={exp} index={index} />
@@ -118,7 +117,6 @@ export const About: React.FC = () => {
         </Section>
 
         {/* Education Section */}
-        {/* <Section title="Education" titleJp="学歴"> */}
         <Section title="Education">
           {education.map((edu, index) => (
             <TimelineCard key={index} item={edu} index={index} />
@@ -127,27 +125,28 @@ export const About: React.FC = () => {
       </div>
 
       {/* Interests Section */}
-      {/* <Section title="Interests" titleJp="興味"> */}
-      <Section title="Interests">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            { title: 'Open Source', icon: '{ }', desc: 'Contributing to React and Node.js ecosystems' },
-            { title: 'Hiking', icon: '⛰', desc: 'Exploring trails and reconnecting with nature' },
-            { title: 'Guitar', icon: '♪', desc: 'Playing acoustic from rock to indie folk' },
-          ].map((interest, index) => (
-            <div
-              key={index}
-              className="group p-6 rounded-lg bg-saka-highlight/5 backdrop-blur-sm border border-saka-highlight/10 hover:border-saka-highlight/30 transition-all duration-500 hover:-translate-y-1"
-            >
-              <span className="text-2xl mb-3 block opacity-60 group-hover:opacity-100 transition-opacity">
-                {interest.icon}
-              </span>
-              <h3 className="text-base font-medium text-saka-ink/80 mb-2">{interest.title}</h3>
-              <p className="text-sm text-saka-highlight/60 leading-relaxed">{interest.desc}</p>
-            </div>
-          ))}
-        </div>
-      </Section>
-    </div >
+      <div className="max-w-4xl mx-auto mt-8">
+        <Section title="Interests">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              { title: 'Open Source', icon: '{ }', desc: 'Contributing to React and Node.js ecosystems' },
+              { title: 'Hiking', icon: '⛰', desc: 'Exploring trails and reconnecting with nature' },
+              { title: 'Guitar', icon: '♪', desc: 'Playing acoustic from rock to indie folk' },
+            ].map((interest, index) => (
+              <div
+                key={index}
+                className="group p-4 rounded-lg bg-saka-highlight/5 backdrop-blur-sm border border-saka-highlight/10 hover:border-saka-highlight/30 transition-all duration-500 hover:-translate-y-1"
+              >
+                <span className="text-xl mb-2 block opacity-60 group-hover:opacity-100 transition-opacity">
+                  {interest.icon}
+                </span>
+                <h3 className="text-sm font-medium text-saka-ink/80 mb-1">{interest.title}</h3>
+                <p className="text-xs text-saka-highlight/60 leading-relaxed">{interest.desc}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+      </div>
+    </div>
   );
 };
