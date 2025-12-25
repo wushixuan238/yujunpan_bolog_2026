@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { OrganicBackground } from './components/OrganicBackground';
 import { NoiseOverlay } from './components/NoiseOverlay';
 import { Navigation } from './components/Navigation';
+import { About } from './components/About';
 import { PlaylistItem } from './types';
 
 // Mock Data representing the "List" style from the reference image
@@ -14,9 +15,12 @@ const playList: PlaylistItem[] = [
   { id: '6', title: 'Tong Poo', originalTitle: '東風', duration: '05:15' },
 ];
 
+export type PageType = 'home' | 'blog' | 'about';
+
 export default function App() {
   const [mounted, setMounted] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState<PageType>('home');
 
   useEffect(() => {
     setMounted(true);
@@ -34,12 +38,15 @@ export default function App() {
       {/* 3. Content Layer */}
       <div className="relative z-10 flex flex-col min-h-screen">
 
-        <Navigation />
+        <Navigation currentPage={currentPage} onNavigate={setCurrentPage} />
 
-        <main className="flex-grow flex flex-col md:flex-row items-center md:items-end justify-between px-8 md:px-20 pb-20 pt-32 w-full max-w-7xl mx-auto">
+        {currentPage === 'about' ? (
+          <About />
+        ) : (
+          <main className="flex-grow flex flex-col md:flex-row items-end justify-between px-8 md:px-20 pb-32 pt-20 w-full max-w-7xl mx-auto">
 
           {/* Left Side: Main Title (Japanese/Chinese Style) */}
-          <div className="mb-16 md:mb-0 w-full md:w-1/2 select-none pointer-events-none">
+          <div className="mb-16 md:mb-0 w-full md:w-auto select-none pointer-events-none">
             <h1 className="text-4xl md:text-6xl font-bold text-saka-ink mix-blend-color-burn opacity-80 mb-4 tracking-wide leading-tight">
               {/* Yujun <br /> Pan */}
             </h1>
@@ -53,7 +60,7 @@ export default function App() {
           </div>
 
           {/* Right Side: The List (Interactive) */}
-          <div className="w-full md:w-1/2 flex flex-col items-start md:items-end gap-6 text-saka-highlight mix-blend-overlay">
+          <div className="w-full md:w-auto flex flex-col items-start md:items-end gap-6 text-saka-highlight mix-blend-overlay md:pr-0 md:mr-0 md:absolute md:right-8 md:bottom-32">
             {playList.map((item, index) => (
               <div
                 key={item.id}
@@ -87,7 +94,8 @@ export default function App() {
             ))}
           </div>
 
-        </main>
+          </main>
+        )}
 
         {/* Footer / Copyright */}
         <footer className="absolute bottom-6 left-8 text-[10px] md:text-xs text-saka-highlight/40 tracking-[0.2em] font-sans mix-blend-overlay uppercase">

@@ -1,16 +1,25 @@
 import React from 'react';
 import { NavItem } from '../types';
+import { PageType } from '../App';
 
 const links: NavItem[] = [
-  { label: 'Home', href: '#' },
-  { label: 'Blog', href: '#' },
-  { label: 'About', href: '#' },
+  { label: 'Home', href: 'home' },
+  { label: 'Blog', href: 'blog' },
+  { label: 'About', href: 'about' },
 ];
 
-export const Navigation: React.FC = () => {
+interface NavigationProps {
+  currentPage: PageType;
+  onNavigate: (page: PageType) => void;
+}
+
+export const Navigation: React.FC<NavigationProps> = ({ currentPage, onNavigate }) => {
   return (
     <nav className="fixed top-0 left-0 w-full p-8 md:p-12 z-40 flex justify-between items-start mix-blend-difference text-saka-highlight">
-      <div className="text-xl font-medium tracking-widest uppercase opacity-90 hover:opacity-100 transition-opacity cursor-pointer">
+      <div 
+        onClick={() => onNavigate('home')}
+        className="text-xl font-medium tracking-widest uppercase opacity-90 hover:opacity-100 transition-opacity cursor-pointer"
+      >
         Yujun.
       </div>
 
@@ -18,8 +27,11 @@ export const Navigation: React.FC = () => {
         {links.map((link) => (
           <a
             key={link.label}
-            href={link.href}
-            className="group relative overflow-hidden pb-1"
+            onClick={(e) => {
+              e.preventDefault();
+              onNavigate(link.href as PageType);
+            }}
+            className={`group relative overflow-hidden pb-1 cursor-pointer ${currentPage === link.href ? 'opacity-100' : 'opacity-70'}`}
           >
             <span className="block transition-transform duration-500 group-hover:-translate-y-full">
               {link.label}
@@ -27,7 +39,7 @@ export const Navigation: React.FC = () => {
             <span className="absolute top-0 left-0 block translate-y-full transition-transform duration-500 group-hover:translate-y-0 italic">
               {link.label}
             </span>
-            <span className="absolute bottom-0 left-0 h-[1px] w-full origin-right scale-x-0 bg-current transition-transform duration-500 group-hover:origin-left group-hover:scale-x-100" />
+            <span className={`absolute bottom-0 left-0 h-[1px] w-full origin-right bg-current transition-transform duration-500 ${currentPage === link.href ? 'scale-x-100' : 'scale-x-0 group-hover:origin-left group-hover:scale-x-100'}`} />
           </a>
         ))}
       </div>
