@@ -3,6 +3,7 @@ import { OrganicBackground } from './components/OrganicBackground';
 import { NoiseOverlay } from './components/NoiseOverlay';
 import { Navigation } from './components/Navigation';
 import { About } from './components/About';
+import { Blog } from './components/Blog';
 import { PlaylistItem } from './types';
 
 // Mock Data representing the "List" style from the reference image
@@ -42,6 +43,8 @@ export default function App() {
 
         {currentPage === 'about' ? (
           <About />
+        ) : currentPage === 'blog' ? (
+          <Blog />
         ) : (
           <main className="flex-grow flex flex-col md:flex-row items-end justify-between px-8 md:px-20 pb-32 pt-20 w-full max-w-7xl mx-auto">
 
