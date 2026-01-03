@@ -38,7 +38,7 @@ export const Blog: React.FC = () => {
 
   useEffect(() => {
     const loadPosts = () => {
-      const modules = import.meta.glob('./../posts/*.md', { eager: true, query: '?raw', import: 'default' });
+      const modules = import.meta.glob('./../posts/**/*.md', { eager: true, query: '?raw', import: 'default' });
 
       const posts: BlogPost[] = Object.values(modules).map((raw: any) => {
         try {
@@ -79,8 +79,8 @@ export const Blog: React.FC = () => {
 
         <article>
           <header className="mb-12">
-            <time className="text-sm text-saka-ink/50 tracking-widest">{selectedPost.date}</time>
-            <h1 className="text-2xl md:text-4xl font-light text-saka-ink/90 mt-3 mb-2 tracking-wide">
+            <time className="text-sm text-saka-ink/60 tracking-widest">{selectedPost.date}</time>
+            <h1 className="text-2xl md:text-4xl font-normal text-saka-ink mt-3 mb-2 tracking-wide">
               {selectedPost.title}
             </h1>
             <p className="text-base text-saka-ink/60 tracking-wider">{selectedPost.titleJp}</p>
@@ -94,9 +94,9 @@ export const Blog: React.FC = () => {
             <div className="mt-8 h-px w-24 bg-saka-ink/20" />
           </header>
 
-          <div className="prose prose-lg max-w-none text-saka-ink/90 leading-loose font-light">
+          <div className="prose prose-lg max-w-none text-saka-ink leading-loose font-normal">
             <Markdown components={{
-              p: ({ node, ...props }) => <p className="mb-6" {...props} />
+              p: ({ node, ...props }) => <p className="mb-6 opacity-90" {...props} />
             }}>
               {selectedPost.content}
             </Markdown>

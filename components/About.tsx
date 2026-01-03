@@ -1,4 +1,4 @@
-import React from 'react';
+import { GitHubCalendar } from 'react-github-calendar';
 
 interface TimelineItem {
   title: string;
@@ -16,6 +16,27 @@ const experiences: TimelineItem[] = [
     duration: '2026 - Present',
     type: 'Full-time',
   },
+];
+
+const workbench = [
+  { category: 'Languages', items: ['TypeScript', 'Java', 'Python', 'SQL'] },
+  { category: 'Frameworks', items: ['React', 'Next.js', 'Spring Boot', 'Tailwind'] },
+  { category: 'Tools', items: ['Git', 'Docker', 'Figma', 'PostgreSQL'] },
+];
+
+const projects = [
+  {
+    title: 'Personal Website',
+    desc: 'A digital garden built with React and Tailwind, featuring organic design and interactive elements.',
+    link: 'https://github.com/wushixuan238/persional-web',
+    tech: 'React · Vite · Tailwind'
+  },
+  {
+    title: 'Ship Management System',
+    desc: 'Enterprise-grade backend system for maritime logistics.',
+    link: 'https://github.com/wushixuan238',
+    tech: 'Java · Spring Boot · MySQL'
+  }
 ];
 
 const education: TimelineItem[] = [
@@ -96,56 +117,101 @@ const Section: React.FC<SectionProps> = ({ title, titleJp, children }) => (
 
 export const About: React.FC = () => {
   return (
-    <div className="w-full h-screen overflow-hidden flex flex-col justify-center px-8 md:px-20 py-20">
+    <div className="w-full min-h-screen flex flex-col items-center px-8 md:px-20 py-32 animate-fade-in">
       {/* Header */}
-      <header className="mb-8 md:mb-12 text-center">
-        <h1 className="text-2xl md:text-4xl font-light text-saka-ink/90 tracking-wider mb-2">
+      <header className="mb-20 text-center">
+        <h1 className="text-3xl md:text-5xl font-light text-saka-ink/90 tracking-wider mb-3">
           About Me
         </h1>
-        <p className="text-sm md:text-base text-saka-highlight/70 max-w-2xl mx-auto leading-relaxed font-light">
-          私の骨も青いから。
+        <p className="text-sm md:text-base text-saka-ink/50 max-w-2xl mx-auto leading-relaxed font-serif italic">
+          "The code is the bone, the design is the flesh."
         </p>
-        <div className="mt-4 h-px w-24 bg-saka-highlight/30 mx-auto" />
+        <div className="mt-8 h-px w-24 bg-saka-ink/20 mx-auto" />
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 max-w-4xl mx-auto">
-        {/* Experience Section */}
-        <Section title="Experience">
-          {experiences.map((exp, index) => (
-            <TimelineCard key={index} item={exp} index={index} />
-          ))}
-        </Section>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 max-w-5xl w-full mb-24">
+        {/* Left Column: Experience & Education */}
+        <div className="space-y-16">
+          <Section title="Experience" titleJp="経歴">
+            {experiences.map((exp, index) => (
+              <TimelineCard key={index} item={exp} index={index} />
+            ))}
+          </Section>
 
-        {/* Education Section */}
-        <Section title="Education">
-          {education.map((edu, index) => (
-            <TimelineCard key={index} item={edu} index={index} />
-          ))}
-        </Section>
+          <Section title="Education" titleJp="学歴">
+            {education.map((edu, index) => (
+              <TimelineCard key={index} item={edu} index={index} />
+            ))}
+          </Section>
+        </div>
+
+        {/* Right Column: Workbench & Projects */}
+        <div className="space-y-16">
+          <Section title="Workbench" titleJp="技術スタック">
+            <div className="space-y-8">
+              {workbench.map((group) => (
+                <div key={group.category}>
+                  <h4 className="text-sm font-medium text-saka-ink/60 uppercase tracking-widest mb-3">{group.category}</h4>
+                  <div className="flex flex-wrap gap-x-6 gap-y-2 text-saka-ink/80 font-serif text-lg">
+                    {group.items.map(item => (
+                      <span key={item} className="relative group cursor-default">
+                        <span className="group-hover:text-saka-deep-red transition-colors duration-300">{item}</span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Section>
+
+          <Section title="Selected Works" titleJp="代表作">
+            <div className="space-y-8">
+              {projects.map((project, index) => (
+                <a
+                  key={index}
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block group p-6 -mx-6 rounded-xl hover:bg-saka-ink/5 transition-all duration-500"
+                >
+                  <div className="flex justify-between items-baseline mb-2">
+                    <h3 className="text-xl font-normal text-saka-ink/90 group-hover:text-saka-deep-red transition-colors">
+                      {project.title}
+                    </h3>
+                    <span className="text-xs text-saka-ink/40 opacity-0 group-hover:opacity-100 transition-opacity">↗</span>
+                  </div>
+                  <p className="text-sm text-saka-ink/60 leading-relaxed mb-3 font-serif">
+                    {project.desc}
+                  </p>
+                  <div className="text-xs text-saka-ink/40 tracking-wider font-mono">
+                    {project.tech}
+                  </div>
+                </a>
+              ))}
+            </div>
+          </Section>
+        </div>
       </div>
 
-      {/* Interests Section */}
-      <div className="max-w-4xl mx-auto mt-8">
-        <Section title="Interests">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              { title: 'Open Source', icon: '{ }', desc: 'Contributing to React and Node.js ecosystems' },
-              { title: 'Hiking', icon: '⛰', desc: 'Exploring trails and reconnecting with nature' },
-              { title: 'Guitar', icon: '♪', desc: 'Playing acoustic from rock to indie folk' },
-            ].map((interest, index) => (
-              <div
-                key={index}
-                className="group p-4 rounded-lg bg-saka-highlight/5 backdrop-blur-sm border border-saka-highlight/10 hover:border-saka-highlight/30 transition-all duration-500 hover:-translate-y-1"
-              >
-                <span className="text-xl mb-2 block opacity-60 group-hover:opacity-100 transition-opacity">
-                  {interest.icon}
-                </span>
-                <h3 className="text-sm font-medium text-saka-ink/80 mb-1">{interest.title}</h3>
-                <p className="text-xs text-saka-highlight/60 leading-relaxed">{interest.desc}</p>
-              </div>
-            ))}
+      {/* GitHub Activity Section */}
+      <div className="w-full max-w-4xl mx-auto border-t border-saka-ink/10 pt-20">
+        <div className="flex flex-col items-center">
+          <h3 className="text-sm text-saka-ink/40 uppercase tracking-[0.2em] mb-8">Code Activity</h3>
+          <div className="p-8 rounded-2xl bg-white/30 backdrop-blur-sm border border-saka-ink/5 hover:border-saka-ink/10 transition-colors duration-500 w-full overflow-hidden flex justify-center">
+            <GitHubCalendar
+              username="wushixuan238"
+              colorScheme="light"
+              style={{ color: '#2A1B1B' }}
+              theme={{
+                light: ['#EBE9E4', '#D5D2C8', '#A8A49C', '#787368', '#2A1B1B'],
+                dark: ['#EBE9E4', '#D5D2C8', '#A8A49C', '#787368', '#2A1B1B'],
+              }}
+              fontSize={12}
+              blockSize={12}
+              blockMargin={4}
+            />
           </div>
-        </Section>
+        </div>
       </div>
     </div>
   );
