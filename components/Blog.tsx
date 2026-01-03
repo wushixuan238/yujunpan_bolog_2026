@@ -27,6 +27,8 @@ export const Blog: React.FC = () => {
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const POSTS_PER_PAGE = 10;
 
   // Extract unique tags from all posts
   const allTags = Array.from(new Set(blogPosts.flatMap(post => post.tags || []))).sort();
@@ -35,6 +37,12 @@ export const Blog: React.FC = () => {
   const filteredPosts = selectedTag
     ? blogPosts.filter(post => post.tags?.includes(selectedTag))
     : blogPosts;
+
+  // Pagination Logic
+  const indexOfLastPost = currentPage * POSTS_PER_PAGE;
+  const indexOfFirstPost = indexOfLastPost - POSTS_PER_PAGE;
+  const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
+  const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
 
   useEffect(() => {
     const loadPosts = () => {
@@ -130,7 +138,10 @@ export const Blog: React.FC = () => {
         {allTags.map((tag) => (
           <button
             key={tag}
-            onClick={() => setSelectedTag(tag === selectedTag ? null : tag)}
+            onClick={() => {
+              setSelectedTag(tag === selectedTag ? null : tag);
+              setCurrentPage(1);
+            }}
             className={`text-xs tracking-widest uppercase transition-all duration-300 px-4 py-2 rounded-full border ${selectedTag === tag
               ? 'border-saka-ink/30 text-saka-ink'
               : 'border-transparent text-saka-ink/40 hover:text-saka-ink/70'
@@ -148,7 +159,7 @@ export const Blog: React.FC = () => {
       )}
 
       <div className="space-y-8">
-        {filteredPosts.map((post) => (
+        {currentPosts.map((post) => (
           <article
             key={post.id}
             onClick={() => setSelectedPost(post)}
@@ -185,6 +196,31 @@ export const Blog: React.FC = () => {
           </article>
         ))}
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-8 mt-20 text-xs tracking-widest text-saka-ink/60">
+          <button
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className={`transition-colors duration-300 ${currentPage === 1 ? 'opacity-30 cursor-not-allowed' : 'hover:text-saka-deep-red'}`}
+          >
+            PREV
+          </button>
+
+          <span className="font-mono opacity-50">
+            {currentPage} / {totalPages}
+          </span>
+
+          <button
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className={`transition-colors duration-300 ${currentPage === totalPages ? 'opacity-30 cursor-not-allowed' : 'hover:text-saka-deep-red'}`}
+          >
+            NEXT
+          </button>
+        </div>
+      )}
     </div>
   );
 };
