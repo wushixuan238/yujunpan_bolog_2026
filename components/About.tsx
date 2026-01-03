@@ -10,9 +10,9 @@ interface TimelineItem {
 
 const experiences: TimelineItem[] = [
   {
-    title: '云账房',
+    title: 'DiDi',
     subtitle: 'Backend Development Engineer',
-    location: 'NanJing, CN',
+    location: 'Hangzhou, CN',
     duration: '2026 - Present',
     type: 'Full-time',
   },

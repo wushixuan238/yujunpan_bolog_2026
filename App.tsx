@@ -4,7 +4,9 @@ import { NoiseOverlay } from './components/NoiseOverlay';
 import { Navigation } from './components/Navigation';
 import { About } from './components/About';
 import { Blog } from './components/Blog';
+import { Now } from './components/Now';
 import { SnowEffect } from './components/SnowEffect';
+import { ClickEffect } from './components/ClickEffect';
 import { PlaylistItem } from './types';
 
 const playList: PlaylistItem[] = [
@@ -14,7 +16,7 @@ const playList: PlaylistItem[] = [
   { id: '4', title: 'Study', originalTitle: '學習', duration: '05:03' },
 ];
 
-export type PageType = 'home' | 'blog' | 'about';
+export type PageType = 'home' | 'blog' | 'about' | 'now';
 
 export default function App() {
   const [mounted, setMounted] = useState(false);
@@ -42,7 +44,7 @@ export default function App() {
 
       {/* 3. Content Layer */}
       <div className="relative z-10 flex flex-col min-h-screen">
-
+        <ClickEffect />
         {snowEnabled && <SnowEffect />}
 
         <Navigation
@@ -54,6 +56,8 @@ export default function App() {
 
         {currentPage === 'about' ? (
           <About />
+        ) : currentPage === 'now' ? (
+          <Now />
         ) : currentPage === 'blog' ? (
           <Blog />
         ) : (

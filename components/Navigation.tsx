@@ -4,6 +4,7 @@ import { PageType } from '../App';
 
 const links: NavItem[] = [
   { label: 'Home', href: 'home' },
+  { label: 'Now', href: 'now' },
   { label: 'Blog', href: 'blog' },
   { label: 'About', href: 'about' },
 ];
@@ -26,6 +27,15 @@ export const Navigation: React.FC<NavigationProps> = ({ currentPage, onNavigate,
       </div>
 
       <div className="flex flex-col md:flex-row gap-6 md:gap-12 text-sm font-light tracking-widest">
+        {/* Snow Toggle */}
+        <button
+          onClick={onToggleSnow}
+          className={`opacity-70 hover:opacity-100 transition-opacity ${snowEnabled ? 'text-saka-highlight' : 'text-saka-highlight/50'}`}
+          title={snowEnabled ? "Stop Snow" : "Let it Snow"}
+        >
+          ❄
+        </button>
+
         {links.map((link) => (
           <a
             key={link.label}
@@ -44,15 +54,6 @@ export const Navigation: React.FC<NavigationProps> = ({ currentPage, onNavigate,
             <span className={`absolute bottom-0 left-0 h-[1px] w-full origin-right bg-current transition-transform duration-500 ${currentPage === link.href ? 'scale-x-100' : 'scale-x-0 group-hover:origin-left group-hover:scale-x-100'}`} />
           </a>
         ))}
-
-        {/* Snow Toggle */}
-        <button
-          onClick={onToggleSnow}
-          className={`opacity-70 hover:opacity-100 transition-opacity ${snowEnabled ? 'text-saka-highlight' : 'text-saka-highlight/50'}`}
-          title={snowEnabled ? "Stop Snow" : "Let it Snow"}
-        >
-          ❄
-        </button>
       </div>
     </nav>
   );
