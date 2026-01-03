@@ -69,8 +69,9 @@ export default function App() {
                 Yujun <br /> Pan
               </h1> */}
               <p className="text-sm md:text-base text-saka-ink opacity-60 font-serif tracking-widest mb-12">
-                设计师，开发者，以及一个不希望自己只是设计师和开发者的人。<br />
-                这个博客囊括了我写过的大部分文章，而这里面的大部分其实都没有什么营养。<br />所以，慎重点击。
+                如果不写代码，我就是一个普通的思考者。<br />
+                这里是我与平庸对抗的失败记录。<br />
+                归档了我所有的非生产环境产出。
               </p>
             </div>
 
