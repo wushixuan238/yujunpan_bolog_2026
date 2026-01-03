@@ -21,21 +21,22 @@ View your app in AI Studio: https://ai.studio/apps/drive/1mpbChWMD2FKbeFWImTDBiG
 
 ## 如何添加新文章
 
-1. 打开 `components/Blog.tsx` 文件。
-2. 找到 `blogPosts` 数组。
-3. 按照以下格式在数组中添加一个新的对象：
+1. 在项目根目录下找到 `posts` 文件夹。
+2. 创建一个新的 `.md` 文件（例如 `my-new-post.md`）。
+3. 在文件开头添加此时所需的元数据（Front Matter），格式如下：
 
-```typescript
-{
-  id: 'unique-id', // 例如：'5'
-  title: '英文标题',
-  titleJp: '日文或副标题',
-  date: 'YYYY.MM.DD', // 日期格式
-  excerpt: '列表页显示的简短摘要。',
-  content: `在这里写博客正文。
-  
-  如果你想分段，请敲两次回车。`,
-  tags: ['标签1', '标签2'],
-}
+```markdown
+---
+id: 'unique-id'       # 唯一标识符
+title: '文章标题'
+titleJp: '日文或副标题'
+date: 'YYYY.MM.DD'    # 发布日期
+excerpt: '文章摘要，将显示在列表页。'
+tags: ['标签1', '标签2']
+---
+
+在这里开始写您的文章正文...
+
+支持 **Markdown** 语法。
 ```
-4. 保存文件，网站会自动更新。
+4. 保存文件，网站会自动检测并显示新文章。

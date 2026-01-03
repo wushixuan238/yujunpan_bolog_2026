@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Markdown from 'react-markdown';
+// @ts-ignore
+import frontMatter from 'front-matter';
 
 interface BlogPost {
   id: string;
@@ -10,73 +13,49 @@ interface BlogPost {
   tags: string[];
 }
 
-const blogPosts: BlogPost[] = [
-  {
-    id: '1',
-    title: 'The Art of Minimalism in Code',
-    titleJp: 'コードにおけるミニマリズムの芸術',
-    date: '2024.12.20',
-    excerpt: 'Exploring how less can be more when writing elegant, maintainable software.',
-    content: `In the world of software development, there's a constant tension between adding features and maintaining simplicity. The best code often isn't the most clever—it's the most clear.
-
-Minimalism in code means:
-- Writing only what's necessary
-- Choosing clarity over cleverness  
-- Embracing constraints as creative catalysts
-
-When we strip away the unnecessary, what remains is pure intention.`,
-    tags: ['Philosophy', 'Clean Code'],
-  },
-  {
-    id: '2',
-    title: 'Building with React and TypeScript',
-    titleJp: 'ReactとTypeScriptで構築する',
-    date: '2024.12.15',
-    excerpt: 'A journey through type-safe component architecture and modern patterns.',
-    content: `TypeScript transforms React development from a guessing game into a conversation with your code. Types become documentation, and the compiler becomes your pair programmer.
-
-Key insights:
-- Generic components unlock reusability
-- Discriminated unions model complex state
-- Strict mode catches bugs before users do
-
-The initial investment pays dividends in confidence and velocity.`,
-    tags: ['React', 'TypeScript'],
-  },
-  {
-    id: '3',
-    title: 'On Digital Gardens',
-    titleJp: 'デジタルガーデンについて',
-    date: '2024.12.10',
-    excerpt: 'Why I chose to cultivate ideas rather than publish posts.',
-    content: `A digital garden is not a blog. It's a space for ideas to grow, connect, and evolve over time. Unlike the chronological tyranny of traditional blogs, gardens embrace non-linearity.
-
-Seeds become saplings become trees. Some wither. That's okay.
-
-The garden metaphor reminds us that knowledge is organic, interconnected, and always in flux.`,
-    tags: ['Writing', 'PKM'],
-  },
-  {
-    id: '4',
-    title: 'Wabi-Sabi in Interface Design',
-    titleJp: '侘び寂びとインターフェースデザイン',
-    date: '2024.12.05',
-    excerpt: 'Finding beauty in imperfection and transience within digital experiences.',
-    content: `Wabi-sabi teaches us to appreciate the imperfect, impermanent, and incomplete. How might this ancient aesthetic philosophy inform modern interface design?
-
-Consider:
-- Embracing whitespace as breathing room
-- Allowing asymmetry to create visual interest
-- Designing for graceful degradation
-
-Perfection is not the goal. Authenticity is.`,
-    tags: ['Design', 'Philosophy'],
-  },
-];
+interface FrontMatterAttributes {
+  id: string;
+  title: string;
+  titleJp: string;
+  date: string;
+  excerpt: string;
+  tags: string[];
+}
 
 export const Blog: React.FC = () => {
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadPosts = () => {
+      const modules = import.meta.glob('./../posts/*.md', { eager: true, as: 'raw' });
+
+      const posts: BlogPost[] = Object.values(modules).map((raw: string) => {
+        try {
+          const { attributes, body } = frontMatter<FrontMatterAttributes>(raw);
+          return {
+            id: attributes.id || String(Math.random()),
+            title: attributes.title || 'Untitled',
+            titleJp: attributes.titleJp || '',
+            date: attributes.date || new Date().toISOString(),
+            excerpt: attributes.excerpt || '',
+            tags: attributes.tags || [],
+            content: body,
+          };
+        } catch (e) {
+          console.error('Error parsing frontmatter:', e);
+          return null;
+        }
+      }).filter((post): post is BlogPost => post !== null);
+
+      // Sort by date descending
+      posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      setBlogPosts(posts);
+    };
+
+    loadPosts();
+  }, []);
 
   if (selectedPost) {
     return (
@@ -97,7 +76,7 @@ export const Blog: React.FC = () => {
             </h1>
             <p className="text-base text-saka-ink/60 tracking-wider">{selectedPost.titleJp}</p>
             <div className="flex gap-3 mt-6">
-              {selectedPost.tags.map((tag) => (
+              {selectedPost.tags?.map((tag) => (
                 <span key={tag} className="text-xs px-3 py-1 rounded-full bg-saka-ink/5 text-saka-ink/70">
                   {tag}
                 </span>
@@ -106,12 +85,12 @@ export const Blog: React.FC = () => {
             <div className="mt-8 h-px w-24 bg-saka-ink/20" />
           </header>
 
-          <div className="prose prose-lg max-w-none">
-            {selectedPost.content.split('\n\n').map((paragraph, idx) => (
-              <p key={idx} className="text-saka-ink/90 leading-loose mb-6 font-light">
-                {paragraph}
-              </p>
-            ))}
+          <div className="prose prose-lg max-w-none text-saka-ink/90 leading-loose font-light">
+            <Markdown components={{
+              p: ({ node, ...props }) => <p className="mb-6" {...props} />
+            }}>
+              {selectedPost.content}
+            </Markdown>
           </div>
         </article>
       </div>
@@ -128,6 +107,10 @@ export const Blog: React.FC = () => {
         <div className="mt-6 h-px w-16 bg-saka-ink/20" />
       </header>
 
+      {blogPosts.length === 0 && (
+        <div className="text-saka-ink/40 text-center mt-20 text-sm tracking-widest">Loading posts or no posts found...</div>
+      )}
+
       <div className="space-y-8">
         {blogPosts.map((post) => (
           <article
@@ -141,7 +124,7 @@ export const Blog: React.FC = () => {
               <div className="flex items-baseline justify-between mb-2">
                 <time className="text-xs text-saka-ink/40 tracking-widest">{post.date}</time>
                 <div className="flex gap-2">
-                  {post.tags.map((tag) => (
+                  {post.tags?.map((tag) => (
                     <span key={tag} className="text-[10px] text-saka-ink/40 tracking-wider">
                       {tag}
                     </span>
