@@ -7,14 +7,11 @@ import { Blog } from './components/Blog';
 import { SnowEffect } from './components/SnowEffect';
 import { PlaylistItem } from './types';
 
-// Mock Data representing the "List" style from the reference image
 const playList: PlaylistItem[] = [
   { id: '1', title: 'Honest', originalTitle: '誠實', duration: '04:38' },
   { id: '2', title: 'Adventure', originalTitle: '冒險', duration: '04:20' },
   { id: '3', title: 'Humble', originalTitle: '謙遜', duration: '04:34' },
   { id: '4', title: 'Study', originalTitle: '學習', duration: '05:03' },
-  // { id: '5', title: 'Andata', originalTitle: 'アンダタ', duration: '04:40' },
-  // { id: '6', title: 'Tong Poo', originalTitle: '東風', duration: '05:15' },
 ];
 
 export type PageType = 'home' | 'blog' | 'about';
@@ -60,13 +57,21 @@ export default function App() {
         ) : currentPage === 'blog' ? (
           <Blog />
         ) : (
-          <main className="flex-grow flex flex-col md:flex-row items-end justify-between px-8 md:px-20 pb-32 pt-20 w-full max-w-7xl mx-auto">
+          <main className="flex-grow flex flex-col md:flex-row items-center justify-between px-8 md:px-20 pb-32 pt-20 w-full max-w-7xl mx-auto">
 
-            {/* Left Side: Main Title (Japanese/Chinese Style) */}
-            <div className="mb-16 md:mb-0 w-full md:w-auto select-none pointer-events-none">
-              <h1 className="text-4xl md:text-6xl font-bold text-saka-ink mix-blend-color-burn opacity-80 mb-4 tracking-wide leading-tight">
-                {/* Yujun <br /> Pan */}
-              </h1>
+            {/* Left Side: Main Title & Intro (Centered) */}
+            <div className="mb-16 md:mb-0 w-full md:w-auto z-20 pointer-events-auto select-text">
+              {/* <h1 className="text-4xl md:text-6xl font-bold text-saka-ink mix-blend-color-burn opacity-80 mb-4 tracking-wide leading-tight">
+                Yujun <br /> Pan
+              </h1> */}
+              <p className="text-sm md:text-base text-saka-ink opacity-60 font-serif tracking-widest mb-12">
+                设计师，开发者，以及一个不希望自己只是设计师和开发者的人。<br />
+                这个博客囊括了我写过的大部分文章，而这里面的大部分其实都没有什么营养。<br />所以，慎重点击。
+              </p>
+            </div>
+
+            {/* Left Bottom: Slogan (Absolute) */}
+            <div className="absolute left-8 bottom-32 md:left-20 w-full md:w-auto z-20 pointer-events-auto select-text">
               <h2 className="text-2xl md:text-3xl text-saka-ink opacity-60 font-light tracking-widest mix-blend-multiply">
                 因爲我的骨頭也是藍的。
               </h2>
@@ -77,7 +82,7 @@ export default function App() {
             </div>
 
             {/* Right Side: The List (Interactive) */}
-            <div className="w-full md:w-auto flex flex-col items-start md:items-end gap-6 text-saka-highlight mix-blend-overlay md:pr-0 md:mr-0 md:absolute md:right-8 md:bottom-32">
+            <div className="w-full md:w-auto flex flex-col items-start md:items-end gap-6 text-saka-highlight mix-blend-overlay md:pr-0 md:mr-0 md:absolute md:right-8 md:top-1/2 md:-translate-y-1/2">
               {playList.map((item, index) => (
                 <div
                   key={item.id}

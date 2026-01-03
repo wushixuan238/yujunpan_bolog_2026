@@ -7,7 +7,7 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <title>Yujun Pan</title>
   <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
 
   <!-- Google Fonts: Noto Serif SC for the "literary" look, Playfair Display for headers -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -52,12 +52,47 @@
               '80%': { transform: 'translate(3%, 35%)' },
               '90%': { transform: 'translate(-10%, 10%)' },
             }
-          }
+          },
+          typography: (theme) => ({
+            DEFAULT: {
+              css: {
+                color: theme('colors.saka-ink'),
+                '--tw-prose-body': theme('colors.saka-ink'),
+                '--tw-prose-headings': theme('colors.saka-ink'),
+                '--tw-prose-links': theme('colors.saka-deep-red'),
+                '--tw-prose-bold': theme('colors.saka-ink'),
+                '--tw-prose-counters': theme('colors.saka-ink'),
+                '--tw-prose-bullets': theme('colors.saka-ink'),
+                '--tw-prose-hr': theme('colors.saka-ink'),
+                '--tw-prose-quotes': theme('colors.saka-ink'),
+                '--tw-prose-quote-borders': theme('colors.saka-ink'),
+                '--tw-prose-captions': theme('colors.saka-ink'),
+                '--tw-prose-code': theme('colors.saka-deep-red'),
+                fontFamily: theme('fontFamily.serif'),
+                maxWidth: 'none',
+              },
+            },
+          }),
         }
       }
     }
   </script>
   <style>
+    /* Global Hide Scrollbar */
+    html,
+    body {
+      scrollbar-width: none;
+      /* Firefox */
+      -ms-overflow-style: none;
+      /* IE/Edge */
+    }
+
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+      display: none;
+      /* Chrome/Safari/Opera */
+    }
+
     /* Custom utility to hide scrollbar for cleaner look */
     .no-scrollbar::-webkit-scrollbar {
       display: none;

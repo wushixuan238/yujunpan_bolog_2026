@@ -1,10 +1,10 @@
 ---
 id: '5'
 title: 'CRISPE — ChatGPT 提示工程框架'
-titleJp: 'プロンプトエンジニアリング'
-date: '2024.12.25'
+titleJp: ''
+date: '2025.01.03'
 excerpt: 'Mastering the art of crafting effective prompts for AI.'
-tags: ['AI', 'Engineering']
+tags: ['Prompt Engineering']
 ---
 
 CRISPE 框架促进了与 ChatGPT 的高效交互。CRISPE 中的每个字母代表有效提示的关键组成部分：

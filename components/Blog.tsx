@@ -26,12 +26,21 @@ export const Blog: React.FC = () => {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+
+  // Extract unique tags from all posts
+  const allTags = Array.from(new Set(blogPosts.flatMap(post => post.tags || []))).sort();
+
+  // Filter posts based on selected tag
+  const filteredPosts = selectedTag
+    ? blogPosts.filter(post => post.tags?.includes(selectedTag))
+    : blogPosts;
 
   useEffect(() => {
     const loadPosts = () => {
-      const modules = import.meta.glob('./../posts/*.md', { eager: true, as: 'raw' });
+      const modules = import.meta.glob('./../posts/*.md', { eager: true, query: '?raw', import: 'default' });
 
-      const posts: BlogPost[] = Object.values(modules).map((raw: string) => {
+      const posts: BlogPost[] = Object.values(modules).map((raw: any) => {
         try {
           const { attributes, body } = frontMatter<FrontMatterAttributes>(raw);
           return {
@@ -107,12 +116,39 @@ export const Blog: React.FC = () => {
         <div className="mt-6 h-px w-16 bg-saka-ink/20" />
       </header>
 
-      {blogPosts.length === 0 && (
-        <div className="text-saka-ink/40 text-center mt-20 text-sm tracking-widest">Loading posts or no posts found...</div>
+      {/* Category Filter Bar */}
+      <div className="flex flex-wrap gap-4 mb-16 justify-start md:justify-center animate-fade-in">
+        <button
+          onClick={() => setSelectedTag(null)}
+          className={`text-xs tracking-widest uppercase transition-all duration-300 px-4 py-2 rounded-full border ${selectedTag === null
+            ? 'border-saka-ink/30 text-saka-ink'
+            : 'border-transparent text-saka-ink/40 hover:text-saka-ink/70'
+            }`}
+        >
+          All
+        </button>
+        {allTags.map((tag) => (
+          <button
+            key={tag}
+            onClick={() => setSelectedTag(tag === selectedTag ? null : tag)}
+            className={`text-xs tracking-widest uppercase transition-all duration-300 px-4 py-2 rounded-full border ${selectedTag === tag
+              ? 'border-saka-ink/30 text-saka-ink'
+              : 'border-transparent text-saka-ink/40 hover:text-saka-ink/70'
+              }`}
+          >
+            {tag}
+          </button>
+        ))}
+      </div>
+
+      {filteredPosts.length === 0 && (
+        <div className="text-saka-ink/40 text-center mt-20 text-sm tracking-widest">
+          No posts found{selectedTag ? ` in "${selectedTag}"` : ''}...
+        </div>
       )}
 
       <div className="space-y-8">
-        {blogPosts.map((post) => (
+        {filteredPosts.map((post) => (
           <article
             key={post.id}
             onClick={() => setSelectedPost(post)}
