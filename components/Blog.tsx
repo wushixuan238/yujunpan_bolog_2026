@@ -83,7 +83,7 @@ export const Blog: React.FC = () => {
       <div className="w-full max-w-4xl mx-auto px-8 md:px-12 pt-32 pb-20">
         <button
           onClick={() => setSelectedPost(null)}
-          className="mb-12 text-sm text-saka-highlight/60 hover:text-saka-highlight transition-colors duration-300 flex items-center gap-2"
+          className="mb-12 text-sm text-saka-ink/60 hover:text-saka-ink transition-colors duration-300 flex items-center gap-2"
         >
           <span>←</span>
           <span className="tracking-widest">Back to writings</span>
@@ -91,24 +91,24 @@ export const Blog: React.FC = () => {
 
         <article>
           <header className="mb-12">
-            <time className="text-sm text-saka-highlight/50 tracking-widest">{selectedPost.date}</time>
+            <time className="text-sm text-saka-ink/50 tracking-widest">{selectedPost.date}</time>
             <h1 className="text-2xl md:text-4xl font-light text-saka-ink/90 mt-3 mb-2 tracking-wide">
               {selectedPost.title}
             </h1>
-            <p className="text-base text-saka-highlight/60 tracking-wider">{selectedPost.titleJp}</p>
+            <p className="text-base text-saka-ink/60 tracking-wider">{selectedPost.titleJp}</p>
             <div className="flex gap-3 mt-6">
               {selectedPost.tags.map((tag) => (
-                <span key={tag} className="text-xs px-3 py-1 rounded-full bg-saka-highlight/10 text-saka-highlight/70">
+                <span key={tag} className="text-xs px-3 py-1 rounded-full bg-saka-ink/5 text-saka-ink/70">
                   {tag}
                 </span>
               ))}
             </div>
-            <div className="mt-8 h-px w-24 bg-saka-highlight/30" />
+            <div className="mt-8 h-px w-24 bg-saka-ink/20" />
           </header>
 
           <div className="prose prose-lg max-w-none">
             {selectedPost.content.split('\n\n').map((paragraph, idx) => (
-              <p key={idx} className="text-saka-ink/70 leading-loose mb-6 font-light">
+              <p key={idx} className="text-saka-ink/90 leading-loose mb-6 font-light">
                 {paragraph}
               </p>
             ))}
@@ -124,8 +124,8 @@ export const Blog: React.FC = () => {
         <h1 className="text-3xl md:text-4xl font-light text-saka-ink/90 tracking-wider mb-3">
           Writings
         </h1>
-        <p className="text-sm text-saka-highlight/50 tracking-wider">随筆 · Essays</p>
-        <div className="mt-6 h-px w-16 bg-saka-highlight/30" />
+        <p className="text-sm text-saka-ink/50 tracking-wider">随筆 · Essays</p>
+        <div className="mt-6 h-px w-16 bg-saka-ink/20" />
       </header>
 
       <div className="space-y-8">
@@ -139,29 +139,29 @@ export const Blog: React.FC = () => {
           >
             <div className={`transition-all duration-500 ${hoveredId === post.id ? 'translate-x-4' : ''}`}>
               <div className="flex items-baseline justify-between mb-2">
-                <time className="text-xs text-saka-highlight/40 tracking-widest">{post.date}</time>
+                <time className="text-xs text-saka-ink/40 tracking-widest">{post.date}</time>
                 <div className="flex gap-2">
                   {post.tags.map((tag) => (
-                    <span key={tag} className="text-[10px] text-saka-highlight/40 tracking-wider">
+                    <span key={tag} className="text-[10px] text-saka-ink/40 tracking-wider">
                       {tag}
                     </span>
                   ))}
                 </div>
               </div>
-              
+
               <h2 className="text-lg md:text-xl font-light text-saka-ink/80 mb-1 tracking-wide group-hover:text-saka-ink transition-colors duration-300">
                 《{post.title}》
               </h2>
-              
-              <p className={`text-sm text-saka-highlight/50 tracking-wider transition-all duration-500 ${hoveredId === post.id ? 'opacity-100' : 'opacity-60'}`}>
+
+              <p className={`text-sm text-saka-ink/50 tracking-wider transition-all duration-500 ${hoveredId === post.id ? 'opacity-100' : 'opacity-60'}`}>
                 {post.titleJp}
               </p>
-              
-              <p className={`mt-3 text-sm text-saka-ink/60 leading-relaxed max-w-2xl transition-all duration-500 overflow-hidden ${hoveredId === post.id ? 'max-h-20 opacity-100' : 'max-h-0 opacity-0'}`}>
+
+              <p className={`mt-3 text-sm text-saka-ink/80 leading-relaxed max-w-2xl transition-all duration-500 overflow-hidden ${hoveredId === post.id ? 'max-h-20 opacity-100' : 'max-h-0 opacity-0'}`}>
                 {post.excerpt}
               </p>
-              
-              <div className={`mt-4 h-px bg-saka-highlight/20 transition-all duration-500 ${hoveredId === post.id ? 'w-full' : 'w-0'}`} />
+
+              <div className={`mt-4 h-px bg-saka-ink/20 transition-all duration-500 ${hoveredId === post.id ? 'w-full' : 'w-0'}`} />
             </div>
           </article>
         ))}

@@ -11,12 +11,14 @@ const links: NavItem[] = [
 interface NavigationProps {
   currentPage: PageType;
   onNavigate: (page: PageType) => void;
+  snowEnabled: boolean;
+  onToggleSnow: () => void;
 }
 
-export const Navigation: React.FC<NavigationProps> = ({ currentPage, onNavigate }) => {
+export const Navigation: React.FC<NavigationProps> = ({ currentPage, onNavigate, snowEnabled, onToggleSnow }) => {
   return (
     <nav className="fixed top-0 left-0 w-full p-8 md:p-12 z-40 flex justify-between items-start mix-blend-difference text-saka-highlight">
-      <div 
+      <div
         onClick={() => onNavigate('home')}
         className="text-xl font-medium tracking-widest uppercase opacity-90 hover:opacity-100 transition-opacity cursor-pointer"
       >
@@ -42,6 +44,15 @@ export const Navigation: React.FC<NavigationProps> = ({ currentPage, onNavigate 
             <span className={`absolute bottom-0 left-0 h-[1px] w-full origin-right bg-current transition-transform duration-500 ${currentPage === link.href ? 'scale-x-100' : 'scale-x-0 group-hover:origin-left group-hover:scale-x-100'}`} />
           </a>
         ))}
+
+        {/* Snow Toggle */}
+        <button
+          onClick={onToggleSnow}
+          className={`opacity-70 hover:opacity-100 transition-opacity ${snowEnabled ? 'text-saka-highlight' : 'text-saka-highlight/50'}`}
+          title={snowEnabled ? "Stop Snow" : "Let it Snow"}
+        >
+          ❄
+        </button>
       </div>
     </nav>
   );

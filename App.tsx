@@ -4,6 +4,7 @@ import { NoiseOverlay } from './components/NoiseOverlay';
 import { Navigation } from './components/Navigation';
 import { About } from './components/About';
 import { Blog } from './components/Blog';
+import { SnowEffect } from './components/SnowEffect';
 import { PlaylistItem } from './types';
 
 // Mock Data representing the "List" style from the reference image
@@ -22,39 +23,16 @@ export default function App() {
   const [mounted, setMounted] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState<PageType>('home');
-  const [isScrolling, setIsScrolling] = useState(false);
+  const [snowEnabled, setSnowEnabled] = useState(false);
 
-  const pages: PageType[] = ['home', 'blog', 'about'];
+
+
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    const handleWheel = (e: WheelEvent) => {
-      if (isScrolling) return;
 
-      const currentIndex = pages.indexOf(currentPage);
-      let nextIndex = currentIndex;
-
-      if (e.deltaY > 0) {
-        // Scroll down - next page
-        nextIndex = Math.min(currentIndex + 1, pages.length - 1);
-      } else if (e.deltaY < 0) {
-        // Scroll up - previous page
-        nextIndex = Math.max(currentIndex - 1, 0);
-      }
-
-      if (nextIndex !== currentIndex) {
-        setIsScrolling(true);
-        setCurrentPage(pages[nextIndex]);
-        setTimeout(() => setIsScrolling(false), 800);
-      }
-    };
-
-    window.addEventListener('wheel', handleWheel, { passive: true });
-    return () => window.removeEventListener('wheel', handleWheel);
-  }, [currentPage, isScrolling]);
 
   return (
     <div className={`relative min-h-screen w-full font-serif text-saka-highlight overflow-hidden transition-opacity duration-1000 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
@@ -68,7 +46,14 @@ export default function App() {
       {/* 3. Content Layer */}
       <div className="relative z-10 flex flex-col min-h-screen">
 
-        <Navigation currentPage={currentPage} onNavigate={setCurrentPage} />
+        {snowEnabled && <SnowEffect />}
+
+        <Navigation
+          currentPage={currentPage}
+          onNavigate={setCurrentPage}
+          snowEnabled={snowEnabled}
+          onToggleSnow={() => setSnowEnabled(!snowEnabled)}
+        />
 
         {currentPage === 'about' ? (
           <About />
