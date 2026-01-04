@@ -34,3 +34,21 @@ published: true
 
 skill vs sub-agent
 
+> 12.25
+普通人最大的问题就是浅尝辄止。
+
+> 12.26
+focus on progression, not perfection.
+注重进步，而非完美。
+
+
+> 1.4
+
+Google首席工程师Jaana Dogan最近的分享让人感触很深：团队忙活了一年的分布式Agent架构，Claude Code仅用一小时就给出了基本一致的方案。
+过去大厂的护城河在于充裕的人才、资源和成熟的流程，但在AI时代，过长的决策链路反而成了创新的累赘。而另一方面，Google工程师能大方承认对手的强大，这反而是极其正向的信号。在 AI 竞赛中，最危险的不是技术落后，而是一种Not Invented Here综合征，总觉得自己搞的才是正统，别人出的东西一概不用。摒弃这种心态才能在工具迭代中保持敏锐。归根结底，工具本身没有立场，效率才是衡量价值的唯一标准。
+
+
+I'm not joking and this isn't funny. We have been trying to build distributed agent orchestrators at Google since last year. There are various options, not everyone is aligned... I gave Claude Code a description of the problem, it generated what we built last year in an hour.
+
+我不是在开玩笑，这也不好笑。从去年以来，我们谷歌一直在尝试构建分布式 Agent 编排器。有很多方案，但并非所有人都认同……我向 Claude Code 描述了这个问题，他只用了一个小时就生成了我们去年构建的那个东西。
+
