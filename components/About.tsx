@@ -60,10 +60,10 @@ const TimelineCard: React.FC<{ item: TimelineItem; index: number }> = ({ item, i
     style={{ animationDelay: `${index * 150}ms` }}
   >
     {/* Timeline line */}
-    <div className="absolute left-[3px] top-2 bottom-0 w-px bg-saka-highlight/20 group-last:hidden" />
+    <div className="absolute left-[3px] top-2 bottom-0 w-px bg-saka-ink/20 group-last:hidden" />
 
     {/* Timeline dot */}
-    <div className="absolute left-0 top-2 w-[7px] h-[7px] rounded-full bg-saka-highlight/60 ring-2 ring-saka-highlight/20" />
+    <div className="absolute left-0 top-2 w-[7px] h-[7px] rounded-full bg-saka-ink/60 ring-2 ring-saka-ink/20" />
 
     <div className="transition-all duration-500 group-hover:translate-x-2">
       <h3 className="text-lg md:text-xl font-medium text-saka-ink/90 mb-1">
@@ -72,9 +72,9 @@ const TimelineCard: React.FC<{ item: TimelineItem; index: number }> = ({ item, i
       <p className="text-sm md:text-base text-saka-ink/70 italic mb-2">
         {item.subtitle}
       </p>
-      <div className="flex flex-wrap gap-3 text-xs md:text-sm text-saka-highlight/70">
+      <div className="flex flex-wrap gap-3 text-xs md:text-sm text-saka-ink/70">
         {item.type && (
-          <span className="px-2 py-0.5 rounded-full bg-saka-highlight/10 backdrop-blur-sm">
+          <span className="px-2 py-0.5 rounded-full bg-saka-ink/10 backdrop-blur-sm">
             {item.type}
           </span>
         )}
@@ -108,8 +108,8 @@ const Section: React.FC<SectionProps> = ({ title, titleJp, children }) => (
       <h2 className="text-xl md:text-2xl font-light text-saka-ink/80 tracking-widest mb-1">
         {title}
       </h2>
-      <span className="text-sm text-saka-highlight/50 tracking-wider">{titleJp}</span>
-      <div className="mt-3 h-px w-16 bg-saka-highlight/30" />
+      <span className="text-sm text-saka-ink/50 tracking-wider">{titleJp}</span>
+      <div className="mt-3 h-px w-16 bg-saka-ink/20" />
     </div>
     {children}
   </div>

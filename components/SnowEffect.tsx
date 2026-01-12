@@ -42,12 +42,12 @@ export const SnowEffect: React.FC = () => {
 
         const draw = () => {
             ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = '#EBE9E4'; // saka-highlight
+            ctx.fillStyle = '#2A1B1B'; // saka-ink
 
             snowflakes.forEach((flake) => {
                 ctx.beginPath();
                 ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(235, 233, 228, ${flake.opacity})`; // saka-highlight with opacity
+                ctx.fillStyle = `rgba(42, 27, 27, ${flake.opacity})`; // saka-ink with opacity
                 ctx.fill();
 
                 // Update position

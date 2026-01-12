@@ -18,7 +18,7 @@ interface NavigationProps {
 
 export const Navigation: React.FC<NavigationProps> = ({ currentPage, onNavigate, snowEnabled, onToggleSnow }) => {
   return (
-    <nav className="fixed top-0 left-0 w-full p-8 md:p-12 z-40 flex justify-between items-start mix-blend-difference text-saka-highlight">
+    <nav className="fixed top-0 left-0 w-full p-8 md:p-12 z-40 flex justify-between items-start text-saka-ink">
       <div
         onClick={() => onNavigate('home')}
         className="text-xl font-medium tracking-widest uppercase opacity-90 hover:opacity-100 transition-opacity cursor-pointer"
@@ -30,7 +30,7 @@ export const Navigation: React.FC<NavigationProps> = ({ currentPage, onNavigate,
         {/* Snow Toggle */}
         <button
           onClick={onToggleSnow}
-          className={`opacity-70 hover:opacity-100 transition-opacity ${snowEnabled ? 'text-saka-highlight' : 'text-saka-highlight/50'}`}
+          className={`opacity-70 hover:opacity-100 transition-opacity ${snowEnabled ? 'text-saka-ink' : 'text-saka-ink/50'}`}
           title={snowEnabled ? "Stop Snow" : "Let it Snow"}
         >
           ❄
