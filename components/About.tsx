@@ -147,7 +147,7 @@ export const About: React.FC = () => {
 
         {/* Right Column: Workbench & Projects */}
         <div className="space-y-16">
-          <Section title="Workbench" titleJp="技術スタック">
+          <Section title="Workbench" titleJp="技能">
             <div className="space-y-8">
               {workbench.map((group) => (
                 <div key={group.category}>

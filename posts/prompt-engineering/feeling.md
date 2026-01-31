@@ -20,7 +20,7 @@ tags: ['Prompt Engineering']
 
 CRISPE 代表以下六个要素：
 
-*   **C - Capacity and Role (能力与角色)**
+*   **C - Capacity/ and Role (能力与角色)**
     *   含义：定义AI不仅是某个角色，还要具备某种特定的能力或视角。
     *   示例：“你是一位拥有10年经验的资深健身教练，擅长减脂和营养学。”
 *   **R - Insight (背景/洞察)**

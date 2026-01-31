@@ -17,9 +17,9 @@ export const Now: React.FC = () => {
                         坐标
                     </h2>
                     <p className="text-saka-ink/70 font-serif leading-relaxed">
-                        居住于 <span className="text-saka-deep-red/80">中国，杭州</span>。
+                        <span className="text-saka-deep-red/80">南京</span>。
                         <br />
-                        享受着烟雨朦胧与数字世界的宁静。
+                        码农/独立开发者，偶尔去玄武湖边溜达，更多时候泡在网上。
                     </p>
                 </section>
 
@@ -30,11 +30,7 @@ export const Now: React.FC = () => {
                     <ul className="space-y-4 text-saka-ink/70 font-serif leading-relaxed">
                         <li className="flex items-start">
                             <span className="mr-3 opacity-50">–</span>
-                            <span>构建复杂数据系统的直观界面。</span>
-                        </li>
-                        <li className="flex items-start">
-                            <span className="mr-3 opacity-50">–</span>
-                            <span>修剪这座数字花园，为静思留出一片空间。</span>
+                            <span>这里是我的自留地，整理思绪，防止脑子生锈。</span>
                         </li>
                     </ul>
                 </section>
@@ -48,7 +44,7 @@ export const Now: React.FC = () => {
                             <span className="text-saka-ink/80 italic">《设计心理学》</span>
                             <span className="text-xs text-saka-ink/40 uppercase tracking-widest group-hover:text-saka-deep-red transition-colors">唐·诺曼</span>
                         </div>
-                        <p className="text-sm text-saka-ink/50 mt-1 pl-1">重温设计之本。</p>
+                        <p className="text-sm text-saka-ink/50 mt-1 pl-1">经典老书，常看常新。</p>
                     </div>
                 </section>
 
