@@ -7,6 +7,9 @@ import { Blog } from './components/Blog';
 import { Now } from './components/Now';
 import { SnowEffect } from './components/SnowEffect';
 import { ClickEffect } from './components/ClickEffect';
+
+import { PageTransition } from './components/PageTransition';
+import { AnimatePresence, motion } from 'framer-motion';
 import { PlaylistItem } from './types';
 
 const playList: PlaylistItem[] = [
@@ -54,73 +57,95 @@ export default function App() {
           onToggleSnow={() => setSnowEnabled(!snowEnabled)}
         />
 
-        {currentPage === 'about' ? (
-          <About />
-        ) : currentPage === 'now' ? (
-          <Now />
-        ) : currentPage === 'blog' ? (
-          <Blog />
-        ) : (
-          <main className="flex-grow flex flex-col md:flex-row items-center justify-between px-8 md:px-20 pb-32 pt-20 w-full max-w-7xl mx-auto">
+        <AnimatePresence mode="wait">
+          {currentPage === 'about' ? (
+            <PageTransition key="about" className="w-full">
+              <About />
+            </PageTransition>
+          ) : currentPage === 'now' ? (
+            <PageTransition key="now" className="w-full">
+              <Now />
+            </PageTransition>
+          ) : currentPage === 'blog' ? (
+            <PageTransition key="blog" className="w-full">
+              <Blog />
+            </PageTransition>
+          ) : (
+            <PageTransition key="home" className="w-full flex-grow flex flex-col">
+              <main className="flex-grow flex flex-col md:flex-row items-center justify-between px-8 md:px-20 pb-32 pt-20 w-full max-w-7xl mx-auto">
 
-            {/* Left Side: Main Title & Intro (Centered) */}
-            <div className="mb-16 md:mb-0 w-full md:w-auto z-20 pointer-events-auto select-text">
-              {/* <h1 className="text-4xl md:text-6xl font-bold text-saka-ink mix-blend-color-burn opacity-80 mb-4 tracking-wide leading-tight">
-                Yujun <br /> Pan
-              </h1> */}
-              <p className="text-sm md:text-base text-saka-ink opacity-60 font-serif tracking-widest mb-12">
-                Do first, learn later.
-              </p>
-            </div>
-
-            {/* Left Bottom: Slogan (Absolute) */}
-            <div className="absolute left-8 bottom-32 md:left-20 w-full md:w-auto z-20 pointer-events-auto select-text">
-              <h2 className="text-2xl md:text-3xl text-saka-ink opacity-60 font-light tracking-widest mix-blend-multiply">
-                因爲我的骨頭也是藍的。
-              </h2>
-              <div className="mt-8 h-px w-24 bg-saka-ink opacity-40"></div>
-              <p className="mt-6 text-sm md:text-base text-saka-ink opacity-70 max-w-xs leading-loose font-serif italic">
-                "Because my bones are blue too."
-              </p>
-            </div>
-
-            {/* Right Side: The List (Interactive) */}
-            <div className="w-full md:w-auto flex flex-col items-start md:items-end gap-6 text-saka-ink md:pr-0 md:mr-0 md:absolute md:right-8 md:top-1/2 md:-translate-y-1/2">
-              {playList.map((item, index) => (
-                <div
-                  key={item.id}
-                  onMouseEnter={() => setHoveredItem(item.id)}
-                  onMouseLeave={() => setHoveredItem(null)}
-                  className="group cursor-pointer relative w-full md:w-auto text-left md:text-right"
-                >
-                  {/* 
-                   Typography styling to match the reference:
-                   Serif, enclosed in brackets like the reference image 《Title》 
-                */}
-                  <div className={`
-                    relative transition-all duration-700 ease-out
-                    flex flex-col md:items-end
-                    ${hoveredItem === item.id ? 'translate-x-2 md:-translate-x-4 opacity-100' : 'opacity-70'}
-                `}>
-                    <span className="text-lg md:text-2xl font-light tracking-wider whitespace-nowrap">
-                      《{item.title}》
-                    </span>
-
-                    {/* Subtle reveal of original title on hover */}
-                    <span className={`
-                    text-xs md:text-sm tracking-widest font-light mt-1 text-saka-ink/80
-                    transition-all duration-500
-                    ${hoveredItem === item.id ? 'max-h-10 opacity-100 translate-y-0' : 'max-h-0 opacity-0 -translate-y-2'}
-                  `}>
-                      {item.originalTitle}
-                    </span>
-                  </div>
+                {/* Left Side: Main Title & Intro (Centered) */}
+                <div className="mb-16 md:mb-0 w-full md:w-auto z-20 pointer-events-auto select-text">
+                  <p className="text-sm md:text-base text-saka-ink opacity-60 font-serif tracking-widest mb-12">
+                    Do first, learn later.
+                  </p>
                 </div>
-              ))}
-            </div>
 
-          </main>
-        )}
+                {/* Left Bottom: Slogan (Absolute) */}
+                <div className="absolute left-8 bottom-32 md:left-20 w-full md:w-auto z-20 pointer-events-auto select-text">
+                  <h2 className="text-2xl md:text-3xl text-saka-ink opacity-60 font-light tracking-widest mix-blend-multiply">
+                    因爲我的骨頭也是藍的。
+                  </h2>
+                  <div className="mt-8 h-px w-24 bg-saka-ink opacity-40"></div>
+                  <p className="mt-6 text-sm md:text-base text-saka-ink opacity-70 max-w-xs leading-loose font-serif italic">
+                    "Because my bones are blue too."
+                  </p>
+                </div>
+
+                {/* Right Side: The List (Interactive) */}
+                <motion.div
+                  className="w-full md:w-auto flex flex-col items-start md:items-end gap-6 text-saka-ink md:pr-0 md:mr-0 md:absolute md:right-8 md:top-1/2 md:-translate-y-1/2"
+                  initial="hidden"
+                  animate="show"
+                  variants={{
+                    hidden: { opacity: 0 },
+                    show: {
+                      opacity: 1,
+                      transition: {
+                        staggerChildren: 0.1,
+                        delayChildren: 0.3
+                      }
+                    }
+                  }}
+                >
+                  {playList.map((item) => (
+                    <motion.div
+                      key={item.id}
+                      onMouseEnter={() => setHoveredItem(item.id)}
+                      onMouseLeave={() => setHoveredItem(null)}
+                      className="group cursor-pointer relative w-full md:w-auto text-left md:text-right"
+                      variants={{
+                        hidden: { opacity: 0, x: 20 },
+                        show: { opacity: 1, x: 0, transition: { duration: 0.5, ease: "easeOut" } }
+                      }}
+                      whileHover={{ scale: 1.05, x: -10 }}
+                    >
+                      <div className={`
+                        relative transition-all duration-700 ease-out
+                        flex flex-col md:items-end
+                        ${hoveredItem === item.id ? 'opacity-100' : 'opacity-70'}
+                      `}>
+                        <span className="text-lg md:text-2xl font-light tracking-wider whitespace-nowrap">
+                          《{item.title}》
+                        </span>
+
+                        {/* Subtle reveal of original title on hover */}
+                        <span className={`
+                          text-xs md:text-sm tracking-widest font-light mt-1 text-saka-ink/80
+                          transition-all duration-500
+                          ${hoveredItem === item.id ? 'max-h-10 opacity-100 translate-y-0' : 'max-h-0 opacity-0 -translate-y-2'}
+                        `}>
+                          {item.originalTitle}
+                        </span>
+                      </div>
+                    </motion.div>
+                  ))}
+                </motion.div>
+
+              </main>
+            </PageTransition>
+          )}
+        </AnimatePresence>
 
         {/* Footer / Copyright */}
         <footer className="absolute bottom-6 left-8 right-8 flex justify-between items-center text-[10px] md:text-xs text-saka-ink/50 tracking-[0.2em] font-sans uppercase">
