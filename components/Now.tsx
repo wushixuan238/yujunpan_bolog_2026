@@ -19,7 +19,7 @@ export const Now: React.FC = () => {
                     <p className="text-saka-ink/70 font-serif leading-relaxed">
                         <span className="text-saka-deep-red/80">南京</span>。
                         <br />
-                        码农/独立开发者，偶尔去玄武湖边溜达，更多时候泡在网上。
+                        {/* 码农/独立开发者，偶尔去玄武湖边溜达，更多时候泡在网上。 */}
                     </p>
                 </section>
 
@@ -30,7 +30,7 @@ export const Now: React.FC = () => {
                     <ul className="space-y-4 text-saka-ink/70 font-serif leading-relaxed">
                         <li className="flex items-start">
                             <span className="mr-3 opacity-50">–</span>
-                            <span>这里是我的自留地，整理思绪，防止脑子生锈。</span>
+                            <span>深度思考。</span>
                         </li>
                     </ul>
                 </section>

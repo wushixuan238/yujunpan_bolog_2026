@@ -9,13 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "framer-motion": "^12.34.0",
+    "framer-motion": "12.34.0",
     "front-matter": "^4.0.2",
+    "glob": "^13.0.3",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-github-calendar": "^5.0.4",
-    "react-markdown": "^10.1.0",
-    "framer-motion": "12.34.0"
+    "react-markdown": "^10.1.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

@@ -3,6 +3,9 @@ import Markdown from 'react-markdown';
 // @ts-ignore
 import frontMatter from 'front-matter';
 
+type PostCategory = 'tech' | 'life' | 'other';
+type FilterCategory = 'all' | PostCategory;
+
 interface BlogPost {
   id: string;
   title: string;
@@ -11,10 +14,11 @@ interface BlogPost {
   excerpt: string;
   content: string;
   tags: string[];
+  category: PostCategory;
+  path: string;
 }
 
 interface FrontMatterAttributes {
-  id: string;
   title: string;
   titleJp: string;
   date: string;
@@ -26,39 +30,54 @@ export const Blog: React.FC = () => {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+
+  // Filtering State
+  const [selectedCategory, setSelectedCategory] = useState<FilterCategory>('all');
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+
   const POSTS_PER_PAGE = 10;
-
-  // Extract unique tags from all posts
-  const allTags = Array.from(new Set(blogPosts.flatMap(post => post.tags || []))).sort();
-
-  // Filter posts based on selected tag
-  const filteredPosts = selectedTag
-    ? blogPosts.filter(post => post.tags?.includes(selectedTag))
-    : blogPosts;
-
-  // Pagination Logic
-  const indexOfLastPost = currentPage * POSTS_PER_PAGE;
-  const indexOfFirstPost = indexOfLastPost - POSTS_PER_PAGE;
-  const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
-  const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
 
   useEffect(() => {
     const loadPosts = () => {
+      // Import all markdown files from ../posts
       const modules = import.meta.glob('./../posts/**/*.md', { eager: true, query: '?raw', import: 'default' });
 
-      const posts: BlogPost[] = Object.values(modules).map((raw: any) => {
+      const posts: BlogPost[] = Object.entries(modules).map(([path, raw]: [string, any]) => {
         try {
           const { attributes, body } = frontMatter<FrontMatterAttributes>(raw);
+
+          // Determine category from path
+          // Path example: ./../posts/tech/ai/agent/some-post.md
+          let category: PostCategory = 'other';
+          if (path.includes('/posts/life/')) {
+            category = 'life';
+          } else if (path.includes('/posts/tech/')) {
+            category = 'tech';
+          }
+
+          // Robust tag parsing
+          let tags = attributes.tags || [];
+          if (typeof tags === 'string') {
+            // Handle case where tags might be a comma-separated string
+            tags = (tags as string).split(',').map(t => t.trim());
+          } else if (Array.isArray(tags)) {
+            tags = tags.map(t => String(t).trim());
+          } else {
+            tags = [];
+          }
+
           return {
-            id: attributes.id || String(Math.random()),
+            // Use path as the ID. It is unique and stable.
+            id: path,
             title: attributes.title || 'Untitled',
             titleJp: attributes.titleJp || '',
             date: attributes.date || new Date().toISOString(),
             excerpt: attributes.excerpt || '',
-            tags: attributes.tags || [],
+            tags: tags,
             content: body,
+            category: category,
+            path: path
           };
         } catch (e) {
           console.error('Error parsing frontmatter:', e);
@@ -74,6 +93,31 @@ export const Blog: React.FC = () => {
     loadPosts();
   }, []);
 
+  // -- Filtering Logic --
+
+  // 1. Filter by Category first
+  const requestsByCategory = selectedCategory === 'all'
+    ? blogPosts
+    : blogPosts.filter(post => post.category === selectedCategory);
+
+  // 2. Extract available tags from the *filtered by category* posts
+  //    This ensures regular users don't see "Investment" tags when looking at "Tech"
+  const availableTags = Array.from(new Set(requestsByCategory.flatMap(post => post.tags || []))).sort();
+
+  // 3. Filter by Tag (if selected)
+  //    Reset selectedTag if it's not in the new availableTags?
+  //    For better UX, if we switch category, we probably want to reset tag too.
+  //    (Handled in category click handler)
+  const filteredPosts = selectedTag
+    ? requestsByCategory.filter(post => post.tags?.includes(selectedTag))
+    : requestsByCategory;
+
+  // Pagination Logic
+  const indexOfLastPost = currentPage * POSTS_PER_PAGE;
+  const indexOfFirstPost = indexOfLastPost - POSTS_PER_PAGE;
+  const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
+  const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
+
   if (selectedPost) {
     return (
       <div className="w-full max-w-4xl mx-auto px-8 md:px-12 pt-32 pb-20">
@@ -87,7 +131,13 @@ export const Blog: React.FC = () => {
 
         <article>
           <header className="mb-12">
-            <time className="text-sm text-saka-ink/60 tracking-widest">{selectedPost.date}</time>
+            <div className="flex items-center gap-4 mb-3">
+              <time className="text-sm text-saka-ink/60 tracking-widest">{selectedPost.date}</time>
+              <span className="text-xs uppercase tracking-widest px-2 py-0.5 border border-saka-ink/20 rounded-full text-saka-ink/50">
+                {selectedPost.category}
+              </span>
+            </div>
+
             <h1 className="text-2xl md:text-4xl font-normal text-saka-ink mt-3 mb-2 tracking-wide">
               {selectedPost.title}
             </h1>
@@ -116,7 +166,7 @@ export const Blog: React.FC = () => {
 
   return (
     <div className="w-full max-w-4xl mx-auto px-8 md:px-12 pt-32 pb-20">
-      <header className="mb-16 md:mb-20">
+      <header className="mb-12 md:mb-16">
         <h1 className="text-3xl md:text-4xl font-light text-saka-ink/90 tracking-wider mb-3">
           Writings
         </h1>
@@ -124,18 +174,48 @@ export const Blog: React.FC = () => {
         <div className="mt-6 h-px w-16 bg-saka-ink/20" />
       </header>
 
-      {/* Category Filter Bar */}
-      <div className="flex flex-wrap gap-4 mb-16 justify-start md:justify-center animate-fade-in">
+      {/* Category Switcher */}
+      <div className="flex gap-8 mb-10 border-b border-saka-ink/10 pb-4">
+        {(['all', 'tech', 'life'] as FilterCategory[]).map((cat) => (
+          <button
+            key={cat}
+            onClick={() => {
+              if (selectedCategory !== cat) {
+                setSelectedCategory(cat);
+                setSelectedTag(null); // Reset tag when switching category
+                setCurrentPage(1);
+              }
+            }}
+            className={`
+              text-sm tracking-[0.2em] uppercase transition-all duration-300 relative
+              ${selectedCategory === cat
+                ? 'text-saka-ink font-normal'
+                : 'text-saka-ink/40 hover:text-saka-ink/70 font-light'}
+            `}
+          >
+            {cat}
+            {selectedCategory === cat && (
+              <span className="absolute -bottom-[17px] left-0 w-full h-px bg-saka-ink/60" />
+            )}
+          </button>
+        ))}
+      </div>
+
+      {/* Tag Filter Bar */}
+      <div className="flex flex-wrap gap-4 mb-16 justify-start animate-fade-in">
         <button
-          onClick={() => setSelectedTag(null)}
+          onClick={() => {
+            setSelectedTag(null);
+            setCurrentPage(1);
+          }}
           className={`text-xs tracking-widest uppercase transition-all duration-300 px-4 py-2 rounded-full border ${selectedTag === null
             ? 'border-saka-ink/30 text-saka-ink'
             : 'border-transparent text-saka-ink/40 hover:text-saka-ink/70'
             }`}
         >
-          All
+          All Tags
         </button>
-        {allTags.map((tag) => (
+        {availableTags.map((tag) => (
           <button
             key={tag}
             onClick={() => {
@@ -152,9 +232,9 @@ export const Blog: React.FC = () => {
         ))}
       </div>
 
-      {filteredPosts.length === 0 && (
+      {currentPosts.length === 0 && (
         <div className="text-saka-ink/40 text-center mt-20 text-sm tracking-widest">
-          No posts found{selectedTag ? ` in "${selectedTag}"` : ''}...
+          No posts found...
         </div>
       )}
 
@@ -169,13 +249,22 @@ export const Blog: React.FC = () => {
           >
             <div className={`transition-all duration-500 ${hoveredId === post.id ? 'translate-x-4' : ''}`}>
               <div className="flex items-baseline justify-between mb-2">
-                <time className="text-xs text-saka-ink/40 tracking-widest">{post.date}</time>
+                <div className="flex items-center gap-3">
+                  <time className="text-xs text-saka-ink/40 tracking-widest">{post.date}</time>
+                  <span className="text-[10px] uppercase tracking-wider text-saka-ink/30 border border-saka-ink/10 px-1.5 rounded-sm">
+                    {post.category}
+                  </span>
+                </div>
+
                 <div className="flex gap-2">
-                  {post.tags?.map((tag) => (
+                  {post.tags?.slice(0, 3).map((tag) => (
                     <span key={tag} className="text-[10px] text-saka-ink/40 tracking-wider">
                       {tag}
                     </span>
                   ))}
+                  {(post.tags?.length || 0) > 3 && (
+                    <span className="text-[10px] text-saka-ink/40 tracking-wider">...</span>
+                  )}
                 </div>
               </div>
 
@@ -201,7 +290,10 @@ export const Blog: React.FC = () => {
       {totalPages > 1 && (
         <div className="flex justify-center items-center gap-8 mt-20 text-xs tracking-widest text-saka-ink/60">
           <button
-            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            onClick={(e) => {
+              e.stopPropagation();
+              setCurrentPage(prev => Math.max(prev - 1, 1));
+            }}
             disabled={currentPage === 1}
             className={`transition-colors duration-300 ${currentPage === 1 ? 'opacity-30 cursor-not-allowed' : 'hover:text-saka-deep-red'}`}
           >
@@ -213,7 +305,10 @@ export const Blog: React.FC = () => {
           </span>
 
           <button
-            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            onClick={(e) => {
+              e.stopPropagation();
+              setCurrentPage(prev => Math.min(prev + 1, totalPages));
+            }}
             disabled={currentPage === totalPages}
             className={`transition-colors duration-300 ${currentPage === totalPages ? 'opacity-30 cursor-not-allowed' : 'hover:text-saka-deep-red'}`}
           >
