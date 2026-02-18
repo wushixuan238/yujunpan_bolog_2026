@@ -7,7 +7,7 @@ tags: ['touzi']
 ---
 ## Background
 
-目前我们使用�?GPT �?Gemini 属于 **Passive AI（被动AI�?*。其存储和计算压力是线性增长的，且由人类的“手速”和“提问频率”封顶�?
+目前我们使用GPT Gemini 属于 **Passive AI（被动AI�?*。其存储和计算压力是线性增长的，且由人类的“手速”和“提问频率”封顶�?
 
 * **现状�?* 即使你是个话痨，一天问 500 次已经是极限，产生的数据量以 KB �?MB 计�?
 * **Agent 时代�?* 像你提到�?Clawdbot 这类 Agent，其逻辑�?**Autonomous Loop（自主循环）**�?
